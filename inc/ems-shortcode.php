@@ -22,7 +22,23 @@ final class EMS_shortcode {
 
 	public function add_head() {
 		// echo '<style>.em-svg { vertical-align: middle; } </style>';
-		echo '<style>.em-svg { vertical-align: middle; width: 32px; height: 32px; } </style>';
+		echo '<style>.em-svg { 
+				vertical-align: middle; 
+				width: 64px; 
+				height: 64px; 
+			} 
+				.icon-container { 
+					margin: 1rem; display: inline-flex; 
+					flex-direction: column; 
+					align-items: center; 
+					margin-bottom: 2rem; 
+				}
+				.icon-list {
+					display: grid;
+					grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+				}
+
+			</style>';
 	}
 
 }
