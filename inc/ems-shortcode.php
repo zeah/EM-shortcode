@@ -21,7 +21,8 @@ final class EMS_shortcode {
 	}
 
 	public function add_head() {
-		echo '<style>.em-svg { position: relative; top: 9px; width: 32px; height: 32px; } </style>';
+		// echo '<style>.em-svg { vertical-align: middle; } </style>';
+		echo '<style>.em-svg { vertical-align: middle; width: 32px; height: 32px; } </style>';
 	}
 
 }
