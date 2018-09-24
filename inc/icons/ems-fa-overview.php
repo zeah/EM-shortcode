@@ -48,14 +48,36 @@ final class Ems_fa_overview {
 
 				.em-icon-scmaker {
 					display: flex;
-					flex-direction: column;
+					/*flex-direction: column;*/
 					align-items: center;
+					justify-content: space-between;
 
 					background-color: #fff;
 					padding: 2rem 4rem;
 					border-radius: 20px;
 
-					width: 200px;
+					flex: 1;
+					margin-right: 50px;
+				}
+
+				.em-icon-svgc {
+					flex-basis: 30%;
+					display: flex;
+					justify-content: center;
+				}
+
+				.em-icon-shortcode {
+					font-size: 22px;
+				}
+
+				.em-icon-range {
+					-webkit-appearance: none;
+				    height: 200px;
+				    border-radius: 5px;
+				    background: #ccc;
+				    outline: none;
+				    writing-mode: bt-lr; /* IE */
+				    -webkit-appearance: slider-vertical; /* WebKit */
 				}
 
 				.em-icon-input {
@@ -116,79 +138,79 @@ final class Ems_fa_overview {
 			</style>';
 	}
 
-	public function add_footer() {
-		echo '<script>
+	// public function add_footer() {
+	// 	echo '<script>
 
-			(() => {
+	// 		(() => {
 
-				let title = document.querySelectorAll(".em-icon-name");
+	// 			let title = document.querySelectorAll(".em-icon-name");
 
-				if (!title) return;
+	// 			if (!title) return;
 
-				let input = document.querySelector(".em-icon-input");
+	// 			let input = document.querySelector(".em-icon-input");
 
-				if (!input) return;
+	// 			if (!input) return;
 
-				input.addEventListener("input", (e) => {
+	// 			input.addEventListener("input", (e) => {
 
-					let v = e.target.value;
+	// 				let v = e.target.value;
 
-					if (v.length == 0) {
+	// 				if (v.length == 0) {
 
-						for (let c of title)
-							c.parentNode.style.display = "flex";
-						return;
-					}
-
-
-					if (v.length < 3) return;
-
-					for (let c of title) { 
-						if (c.innerHTML.indexOf(v) == -1)
-							c.parentNode.style.display = "none";
-						else c.parentNode.style.display = "flex";
-					}
-				});
-
-				let maker = document.querySelector(".em-icon-scmaker");
-
-				if (!maker) return;
-
-				let container = document.querySelectorAll(".em-icon-container");
-				if (!container) return;
-
-				let sizeControl = document.createElement("div");
-
-				let sizeInput = document.createElement("input");
-				sizeInput.setAttribute("type", "range");
-
-				sizeControl.appendChild(sizeInput);
-
-				for (let c of container)
-					c.addEventListener("click", () => {
-						while (maker.firstChild) 
- 						   maker.removeChild(maker.firstChild);
-
- 						let svg = c.querySelector(".em-svg").cloneNode(true);
-
- 						let path = svg.querySelector(".em-path");
- 						path.setAttribute("fill", "#000");
-
-						maker.appendChild(svg);
-
-						let shortcode = document.createElement("div");
-						shortcode.appendChild(document.createTextNode("[icon "+c.querySelector(".em-icon-name").innerHTML+"]"));
-						shortcode.style.textAlign = "center";
-						maker.appendChild(shortcode);
-
-						maker.appendChild(sizeControl);
-					});
+	// 					for (let c of title)
+	// 						c.parentNode.style.display = "flex";
+	// 					return;
+	// 				}
 
 
-			})();
+	// 				if (v.length < 3) return;
 
-		</script>';
-	}
+	// 				for (let c of title) { 
+	// 					if (c.innerHTML.indexOf(v) == -1)
+	// 						c.parentNode.style.display = "none";
+	// 					else c.parentNode.style.display = "flex";
+	// 				}
+	// 			});
+
+	// 			let maker = document.querySelector(".em-icon-scmaker");
+
+	// 			if (!maker) return;
+
+	// 			let container = document.querySelectorAll(".em-icon-container");
+	// 			if (!container) return;
+
+	// 			let sizeControl = document.createElement("div");
+
+	// 			let sizeInput = document.createElement("input");
+	// 			sizeInput.setAttribute("type", "range");
+
+	// 			sizeControl.appendChild(sizeInput);
+
+	// 			for (let c of container)
+	// 				c.addEventListener("click", () => {
+	// 					while (maker.firstChild) 
+ // 						   maker.removeChild(maker.firstChild);
+
+ // 						let svg = c.querySelector(".em-svg").cloneNode(true);
+
+ // 						let path = svg.querySelector(".em-path");
+ // 						path.setAttribute("fill", "#000");
+
+	// 					maker.appendChild(svg);
+
+	// 					let shortcode = document.createElement("div");
+	// 					shortcode.appendChild(document.createTextNode("[icon "+c.querySelector(".em-icon-name").innerHTML+"]"));
+	// 					shortcode.style.textAlign = "center";
+	// 					maker.appendChild(shortcode);
+
+	// 					maker.appendChild(sizeControl);
+	// 				});
+
+
+	// 		})();
+
+	// 	</script>';
+	// }
 
 	public function add_menu() {
 		add_menu_page('Icons', 'FA Icons', 'manage_options', 'em-fa-icons', array($this, 'add_page'), 'data:image/svg+xml;base64,' . base64_encode('<svg width="20" height="20" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path fill="rgba(240,245,250,0.45)" d="M397.8 67.8c7.8 0 14.3 6.6 14.3 14.3v347.6c0 7.8-6.6 14.3-14.3 14.3H50.2c-7.8 0-14.3-6.6-14.3-14.3V82.2c0-7.8 6.6-14.3 14.3-14.3h347.6m0-35.9H50.2C22.7 32 0 54.7 0 82.2v347.6C0 457.3 22.7 480 50.2 480h347.6c27.5 0 50.2-22.7 50.2-50.2V82.2c0-27.5-22.7-50.2-50.2-50.2zm-58.5 139.2c-6 0-29.9 15.5-52.6 15.5-4.2 0-8.4-.6-12.5-2.4-19.7-7.8-37-13.7-59.1-13.7-20.3 0-41.8 6.6-59.7 13.7-1.8.6-3.6 1.2-4.8 1.8v-17.9c7.8-6 12.5-14.9 12.5-25.7 0-17.9-14.3-32.3-32.3-32.3s-32.3 14.3-32.3 32.3c0 10.2 4.8 19.7 12.5 25.7v212.1c0 10.8 9 19.7 19.7 19.7 9 0 16.1-6 18.5-13.7V385c.6-1.8.6-3 .6-4.8V336c1.2 0 2.4-.6 3-1.2 19.7-8.4 43-16.7 65.7-16.7 31.1 0 43 16.1 69.3 16.1 18.5 0 36.4-6.6 52-13.7 4.2-1.8 7.2-3.6 7.2-7.8V178.3c1.8-4.1-2.3-7.1-7.7-7.1z"/></svg>'));
