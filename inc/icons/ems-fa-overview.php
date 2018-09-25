@@ -38,26 +38,47 @@ final class Ems_fa_overview {
 		echo '<style>
 				.em-icon-header {
 					display: flex;
-					justify-content: space-between;
+					justify-content: flex-end;
 					padding: 30px;
 
 					position: sticky;
 					top: 32px;
-					background-color: rgb(241, 241, 241);
 				}
 
 				.em-icon-scmaker {
-					display: flex;
+					position: relative;
+					display: none;
 					/*flex-direction: column;*/
 					align-items: center;
 					justify-content: space-between;
 
 					background-color: #fff;
 					padding: 2rem 4rem;
-					border-radius: 20px;
+					border: solid 2px #ccc;
+					border-radius: 20px;	
 
 					flex: 1;
 					margin-right: 50px;
+				}
+
+				.em-icon-button {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100px;
+					height: 60px;
+					border: none;
+					background-color: #666;
+					border-top-left-radius: 18px;
+					font-size: 26px;
+					cursor: pointer;
+					color: #fff;
+				}
+
+				.em-icon-button:focus {
+					border: none;
+					outline: none;
+					box-shadow: none;
 				}
 
 				.em-icon-svgc {
@@ -68,6 +89,16 @@ final class Ems_fa_overview {
 
 				.em-icon-shortcode {
 					font-size: 22px;
+					margin-right: auto;
+				}
+
+				.em-icon-sctext {
+					font-size: 22px;
+					width: 400px;
+					border: none;
+				}
+
+				.em-icon-sizecontrol {
 				}
 
 				.em-icon-range {
@@ -217,7 +248,7 @@ final class Ems_fa_overview {
 	}
 
 	public function add_page() {
-		echo '<div class="em-icon-header"><div class="em-icon-scmaker">Shortcode maker</div><input type="search" class="em-icon-input" placeholder="Search.."></div>';
+		echo '<div class="em-icon-header"><div class="em-icon-scmaker"></div><input type="search" class="em-icon-input" placeholder="Search.."></div>';
 
 
 		echo do_shortcode('[icon all]');

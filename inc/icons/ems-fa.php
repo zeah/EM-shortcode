@@ -10,7 +10,6 @@ final class EMS_fa {
 
 
 	private function icons($icon = null, $type = null) {
-
 		$svg = array(
 		    'address-book' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" %s><path %s d="M436 160c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-20V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h320c26.5 0 48-21.5 48-48v-48h20c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-20v-64h20c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-20v-64h20zm-68 304H48V48h320v416zM208 256c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm-89.6 128h179.2c12.4 0 22.4-8.6 22.4-19.2v-19.2c0-31.8-30.1-57.6-67.2-57.6-10.8 0-18.7 8-44.8 8-26.9 0-33.4-8-44.8-8-37.1 0-67.2 25.8-67.2 57.6v19.2c0 10.6 10 19.2 22.4 19.2z"/></svg>',
 
@@ -2731,7 +2730,7 @@ final class EMS_fa {
 				$color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
 				// $color = '#000';
 
-				$html .= '<div class="em-icon-container">';
+				$html .= '<div class="em-icon-container em-icon-container-regular">';
 
 				$html .= sprintf($value, 
 					'class="em-svg em-svg-'.$key.'"'.$size, 
@@ -2748,7 +2747,7 @@ final class EMS_fa {
 
 			foreach($solid as $key => $value) {
 				$color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-				$html .= '<div class="em-icon-container">';
+				$html .= '<div class="em-icon-container em-icon-container-solid">';
 
 				$html .= sprintf($value, 
 					'class="em-svg em-svg-'.$key.'"'.$size, 
@@ -2765,7 +2764,7 @@ final class EMS_fa {
 
 			foreach($brands as $key => $value) {
 				$color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-				$html .= '<div class="em-icon-container">';
+				$html .= '<div class="em-icon-container em-icon-container-brands">';
 				
 				$html .= sprintf($value, 
 					'class="em-svg em-svg-'.$key.'"'.$size, 
@@ -2792,17 +2791,17 @@ final class EMS_fa {
 		
 		if ($data === false) {
 			$data = [];
-			$data[$icon] = $this->icons($icon, $type);	
+			$data[$icon.$type] = $this->icons($icon, $type);	
 			set_transient('em-icon-fa', $data);
 			return $data[$icon];
 		}
 
-		if (array_key_exists($icon, $data)) return $data[$icon];
+		if (array_key_exists($icon, $data.$type)) return $data[$icon];
 
-		$data[$icon] = $this->icons($icon, $type);
+		$data[$icon.$type] = $this->icons($icon, $type);
 		set_transient('em-icon-fa', $data);
 
-		return $data[$icon];
+		return $data[$icon.$type];
 	}
 
 
@@ -2814,96 +2813,44 @@ final class EMS_fa {
 
 	private function __construct() {
 		Ems_fa_overview::get_instance();
-		// $this->wp_hooks();
+		$this->wp_hooks();
 	}
 
 	private function wp_hooks() {
-		// if (!shortcode_exists('icon')) add_shortcode('icon', array($this, 'shortcode'));
-		// elseif (!shortcode_exists('em-icon')) add_shortcode('em-icon', array($this, 'shortcode'));
+		if (!shortcode_exists('icon')) add_shortcode('icon', array($this, 'shortcode'));
+		elseif (!shortcode_exists('em-icon')) add_shortcode('em-icon', array($this, 'shortcode'));
+	}
+
+	/**
+	 * [icon shortcode]
+	 * @param  String $atts    shortcode parameters
+	 * @param  String $content content between shortcode
+	 * @return String          HTML
+	 */
+	public function shortcode($atts, $content = null) {
+		if (!is_array($atts) || !$atts[0]) return;
+		
+		$name = $atts[0];
+		$size = false;
+		$color = 'fill=black';
+
+		foreach($atts as $key => $value) {
+			if (preg_match('/^\d+?px$/', $value)) $size = $value;
+			elseif (preg_match('/^#(.{6}|.{3})$/', $value)) $color = 'fill='.$value;
+		}
+
+		$type = 'regular';
+
+		if (array_search('solid', $atts)) $type = 'solid';
+		elseif (array_search('brands', $atts)) $type = 'brand';
+
+		return sprintf($this->get_icon($name, $type), 
+			'style="vertical-align: middle" '.($size ? 'height='.$size.' width='.$size : 'height=36px width=36px'), 
+			$color);
 	}
 
 	public function get_all() {
 		return $this->icons('all');
-		// $size = ' style="width: 64px; height: 64px;"';
-
-		// $html = '<div class="icon-list">';
-
-		// foreach($this->svg as $key => $value) {
-		// 	$color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-
-		// 	$html .= '<div class="icon-container">';
-
-		// 	$html .= sprintf($this->svg[$key], 
-		// 		'class="em-svg em-svg-'.$key.'"'.$size, 
-		// 		'class="em-path em-path-'.$key.'" style="fill: '.$color.'"');
-
-		// 	$html .= '<span>'.$key.'</span>';
-
-		// 	$html .= '</div>'; 
-		// }
-
-		// foreach($this->solid as $key => $value) {
-		// 	$color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-		// 	$html .= '<div class="icon-container">';
-
-		// 	$html .= sprintf($this->solid[$key], 
-		// 		'class="em-svg em-svg-'.$key.'"'.$size, 
-		// 		'class="em-path em-path-'.$key.'" style="fill: '.$color.'"');
-		
-
-		// 	$html .= '<span>'.$key.'</span>';
-
-		// 	$html .= '</div>'; 
-		// }
-
-		// foreach($this->brands as $key => $value) {
-		// 	$color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-		// 	$html .= '<div class="icon-container">';
-			
-		// 	$html .= sprintf($this->brands[$key], 
-		// 		'class="em-svg em-svg-'.$key.'"'.$size, 
-		// 		'class="em-path em-path-'.$key.'" style="fill: '.$color.'"');
-		
-
-		// 	$html .= '<span>'.$key.'</span>';
-
-		// 	$html .= '</div>'; 
-		// }
-
-		// $html .= '</div>';
-
-		// return $html;
-
-
-
-
-	// 		return $html;
-		// $svg = $this->brands;
-
-		// $svg = array_merge($svg, $this->svg);
-
-		// wp_die('<xmp>'.print_r($svg, true).'</xmp>');
-
-		// $files = glob('C:\\Users\\arild\\Downloads\\fontawesome-free-5.3.1-web\\svgs\\brands\\*.svg', GLOB_BRACE);
-		// // wp_die('<xmp>'.print_r($files, true).'</xmp>');
-		// foreach($files as $file) {
-		// 	// wp_die('<xmp>'.print_r(str_replace('.svg', '',basename($file)), true).'</xmp>');
-		// 	$f = fopen($file, 'r') or die('Unable to open file.');
-
-		// 	$line = fgets($f);
-
-		// 	$line = str_replace('><path ', ' %s><path %s ', $line); 
-
-		// 	$svg[str_replace('.svg', '',basename($file))] = $line;
-
-
-		// 	// wp_die('<xmp>'.print_r($svg, true).'</xmp>');
-		// 	fclose($f);
-		//   //do your work here
-		// }
-		// wp_die('<xmp>'.print_r($svg, true).'</xmp>');
-
-		// return;
 	}
 
 }
