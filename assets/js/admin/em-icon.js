@@ -142,6 +142,7 @@
 		sizeInput.value = 64;
 		fscode['size'] = '64px';
 
+		// window.scrollTo(0, 0);
 
 		// close button
 		let button = document.createElement('button');

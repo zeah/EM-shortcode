@@ -18,7 +18,7 @@ final class Ems_fa_overview {
 
 	public function wp_hooks() {
 		add_action('admin_menu', array($this, 'add_menu'));
-		add_action('admin_head-toplevel_page_em-fa-icons', array($this, 'add_head'));
+		// add_action('admin_head-toplevel_page_em-fa-icons', array($this, 'add_head'));
 		add_action('admin_enqueue_scripts', array($this, 'add_sands'));
 		// add_action('admin_footer-toplevel_page_em-fa-icons', array($this, 'add_footer'));
 
@@ -30,7 +30,8 @@ final class Ems_fa_overview {
 
 		if ($screen->id != 'toplevel_page_em-fa-icons') return;
 
-		wp_enqueue_script( 'em-icon-script', EM_SHORTCODE_PLUGIN_URL . '/assets/js/admin/em-icon.js', array( 'wp-color-picker' ), false, true );
+        wp_enqueue_style('em-icon-style', EM_SHORTCODE_PLUGIN_URL.'assets/css/admin/em-icon.css', array(), '1.0.0');
+		wp_enqueue_script('em-icon-script', EM_SHORTCODE_PLUGIN_URL . '/assets/js/admin/em-icon.js', array( 'wp-color-picker' ), false, true);
 	}
 
 	public function add_head() {
