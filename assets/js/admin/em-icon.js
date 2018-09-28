@@ -99,9 +99,56 @@
 		a: ']'
 	}
 
+	let textContainer = document.createElement('div');
+
 	// container for shortcode text
 	let text = document.createElement('input');
 	text.classList.add('em-icon-sctext');
+	textContainer.appendChild(text);
+
+	// copy shortcode button
+	let copySc = document.createElement('button');
+	copySc.setAttribute('type', 'button');
+
+	copySc.appendChild(document.createTextNode('Copy Shortcode'));
+
+	// copy shortcode event
+	copySc.addEventListener('click', () => {
+		text.select();
+		document.execCommand('copy');
+		window.getSelection().removeAllRanges();
+	});
+	textContainer.appendChild(copySc);
+
+
+	// copy html button
+	let copyHtml = document.createElement('button');
+	copyHtml.setAttribute('type', 'button');
+
+	// copy html event
+	copyHtml.addEventListener('click', () => {
+
+		let temp = document.createElement('input');
+
+		// gets html
+		let html = document.querySelector('.em-icon-svgc');
+
+		if (!html) return;
+
+		temp.value = html.innerHTML;
+
+		document.body.appendChild(temp);
+		temp.select();
+
+		// copies html
+		document.execCommand('copy');
+		
+		document.body.removeChild(temp);
+	});
+
+	copyHtml.appendChild(document.createTextNode('Copy HTML'));
+
+	textContainer.appendChild(copyHtml);
 
 	// function to update shortcode
 	// updates html input node
@@ -157,7 +204,7 @@
 		maker.appendChild(svgContainer);
 
 		// adds shortcode text to shortcode creator
-		maker.appendChild(text);
+		maker.appendChild(textContainer);
 
 		// adds size control to shortcode creator
 		maker.appendChild(sizeControl);

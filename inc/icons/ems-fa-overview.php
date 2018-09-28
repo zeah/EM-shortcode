@@ -251,7 +251,6 @@ final class Ems_fa_overview {
 	public function add_page() {
 		echo '<div class="em-icon-header"><div class="em-icon-scmaker"></div><input type="search" class="em-icon-input" placeholder="Search.."></div>';
 
-
 		echo do_shortcode('[icon all]');
 	}
 }

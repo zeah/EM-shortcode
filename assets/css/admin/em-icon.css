@@ -34,6 +34,7 @@
 	border-radius: 20px;	
 }
 
+
 .em-icon-button {
 	position: absolute;
 
@@ -77,6 +78,11 @@
 	border: none;
 
 	font-size: 22px;
+}
+
+.em-icon-sctext:focus {
+	border: none;
+	outline: none;
 }
 
 .em-icon-sizecontrol {
@@ -137,10 +143,6 @@
 .em-icon-title {
 	width: 100%;
 	margin-top: 3rem;
-}
-
-#wpfooter {
-	position: static;
 }
 
 .em-icon-scmaker .wp-color-result {

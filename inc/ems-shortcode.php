@@ -58,7 +58,7 @@ final class EMS_shortcode {
 	}
 
 	public function icons($atts, $content = null) {
-
+		// return 'hi';
 		// if (!is_array($atts)) return $this->icon->get_all();
 
 		// wp_die('<xmp>'.print_r($this->icon->get_icon('bell'), true).'</xmp>');
