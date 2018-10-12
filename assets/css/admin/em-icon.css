@@ -7,8 +7,11 @@
 /**/
 .em-icon-header {
 	display: flex;
+	
 	position: fixed;
 	
+	flex-wrap: wrap;
+
 	top: 32px;
 	
 	width: 80%;
@@ -21,6 +24,8 @@
 .em-icon-scmaker {
 	display: none;
 	position: relative;
+
+	/*flex-wrap: wrap;*/
 
 	flex: 1;
 	padding: 2rem 4rem;
@@ -73,6 +78,7 @@
 }
 
 .em-icon-sctext {
+	display: block;
 	width: 400px;
 
 	border: none;

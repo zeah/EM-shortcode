@@ -121,34 +121,37 @@
 	textContainer.appendChild(copySc);
 
 
+
 	// copy html button
-	let copyHtml = document.createElement('button');
-	copyHtml.setAttribute('type', 'button');
+	// let copyHtml = document.createElement('button');
+	// copyHtml.setAttribute('type', 'button');
 
-	// copy html event
-	copyHtml.addEventListener('click', () => {
+	// // copy html event
+	// copyHtml.addEventListener('click', () => {
 
-		let temp = document.createElement('input');
+	// 	let temp = document.createElement('input');
 
-		// gets html
-		let html = document.querySelector('.em-icon-svgc');
+	// 	// gets html
+	// 	let html = document.querySelector('.em-icon-svgc');
 
-		if (!html) return;
+	// 	if (!html) return;
 
-		temp.value = html.innerHTML;
+	// 	temp.value = html.innerHTML;
 
-		document.body.appendChild(temp);
-		temp.select();
+	// 	document.body.appendChild(temp);
+	// 	temp.select();
 
-		// copies html
-		document.execCommand('copy');
+	// 	// copies html
+	// 	document.execCommand('copy');
 		
-		document.body.removeChild(temp);
-	});
+	// 	document.body.removeChild(temp);
+	// });
 
-	copyHtml.appendChild(document.createTextNode('Copy HTML'));
+	// copyHtml.appendChild(document.createTextNode('Copy HTML'));
 
-	textContainer.appendChild(copyHtml);
+	// textContainer.appendChild(copyHtml);
+
+
 
 	// function to update shortcode
 	// updates html input node

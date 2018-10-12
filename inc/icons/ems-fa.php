@@ -9,7 +9,29 @@ final class EMS_fa {
 	private static $instance = null;
 
 
+	public static function get_instance() {
+		if (self::$instance === null) self::$instance = new self();
+
+		return self::$instance;
+	}
+
+
+	private function __construct() {
+		$this->wp_hooks();
+		Ems_fa_overview::get_instance();
+	}
+
+
+	private function wp_hooks() {
+		if (!shortcode_exists('icon')) add_shortcode('icon', array($this, 'shortcode'));
+		elseif (!shortcode_exists('em-icon')) add_shortcode('em-icon', array($this, 'shortcode'));
+	}
+
+
 	private function icons($icon = null, $type = null) {
+
+		if (!$icon) return;
+
 		$svg = array(
 		    'address-book' => '<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512" %s><path %s d="M436 160c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-20V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h320c26.5 0 48-21.5 48-48v-48h20c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-20v-64h20c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-20v-64h20zm-68 304H48V48h320v416zM208 256c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm-89.6 128h179.2c12.4 0 22.4-8.6 22.4-19.2v-19.2c0-31.8-30.1-57.6-67.2-57.6-10.8 0-18.7 8-44.8 8-26.9 0-33.4-8-44.8-8-37.1 0-67.2 25.8-67.2 57.6v19.2c0 10.6 10 19.2 22.4 19.2z"/></svg>',
 
@@ -2702,23 +2724,8 @@ final class EMS_fa {
 		);
 
 
-		if ($icon != 'all') {
-			if ($type == 'solid') {
-				foreach($solid as $key => $value)
-					if ($icon == $key) return $value;
-			}
-
-			if ($type != 'brand') {
-				foreach($svg as $key => $value)
-					if ($icon == $key) return $value;
-			}
-
-			foreach($brands as $key => $value)
-				if ($icon == $key) return $value;
-		}
-
-
-		elseif ($icon == 'all') {
+		// special rule for getting all
+		if ($icon === 'all') {
 			$size = ' style="width: 64px; height: 64px;"';
 
 			$html = '<div class="em-icon-list">';
@@ -2782,6 +2789,24 @@ final class EMS_fa {
 			return $html;
 		}
 
+		// if solid then search solid -> regular -> brands
+		// if brand search only brands
+		// if regular then search regular -> brands 
+		else {
+			if ($type == 'solid') {
+				foreach($solid as $key => $value)
+					if ($icon == $key) return $value;
+			}
+
+			if ($type != 'brand') {
+				foreach($svg as $key => $value)
+					if ($icon == $key) return $value;
+			}
+
+			foreach($brands as $key => $value)
+				if ($icon == $key) return $value;
+		}
+
 	}
 
 	public function get_icon($icon = null, $type = null) {
@@ -2804,22 +2829,6 @@ final class EMS_fa {
 	}
 
 
-	public static function get_instance() {
-		if (self::$instance === null) self::$instance = new self();
-
-		return self::$instance;
-	}
-
-	private function __construct() {
-		Ems_fa_overview::get_instance();
-		$this->wp_hooks();
-	}
-
-	private function wp_hooks() {
-		if (!shortcode_exists('icon')) add_shortcode('icon', array($this, 'shortcode'));
-		elseif (!shortcode_exists('em-icon')) add_shortcode('em-icon', array($this, 'shortcode'));
-	}
-
 	/**
 	 * [icon shortcode]
 	 * @param  String $atts    shortcode parameters
@@ -2829,7 +2838,10 @@ final class EMS_fa {
 	public function shortcode($atts, $content = null) {
 		if (!is_array($atts) || !$atts[0]) return;
 		
+		// if all
 		if ($atts[0] == 'all') return $this->get_all();
+
+		// if icon is specified
 
 		$name = $atts[0];
 		$size = false;
@@ -2844,10 +2856,21 @@ final class EMS_fa {
 
 		if (array_search('solid', $atts)) $type = 'solid';
 		elseif (array_search('brands', $atts)) $type = 'brand';
+		$float = false;
+		if ($atts['float']) {
+			switch ($atts['float']) {
+				case 'left': $float = 'float: left; margin-right: 1rem;'; break;
+				case 'right': $float = 'float: right; margin-left: 1rem;'; break;
+			}
+		}
+
+		$attr = 'style="vertical-align: middle;'.($float ? $float : '').'"';
+
+		$attr .= ($size ? ' height='.$size.' width='.$size : 'height=36px width=36px');
 
 		return sprintf($this->get_icon($name, $type), 
-			'style="vertical-align: middle" '.($size ? 'height='.$size.' width='.$size : 'height=36px width=36px'), 
-			$color);
+						$attr, 
+						$color);
 	}
 
 	public function get_all() {
