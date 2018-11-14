@@ -2817,7 +2817,7 @@ final class EMS_fa {
 
 	public function get_icon($icon = null, $type = null) {
 
-		delete_transient('em-icon-fa');
+		// delete_transient('em-icon-fa');
 		$data = get_transient('em-icon-fa');
 
 		if ($data === false) {
