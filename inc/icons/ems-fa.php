@@ -2868,7 +2868,7 @@ final class EMS_fa {
 		if (array_search('solid', $atts)) $type = 'solid';
 		elseif (array_search('brand', $atts)) $type = 'brand';
 		$float = false;
-		if ($atts['float']) {
+		if (isset($atts['float']) && $atts['float']) {
 			switch ($atts['float']) {
 				case 'left': $float = 'float: left; margin-right: 1rem;'; break;
 				case 'right': $float = 'float: right; margin-left: 1rem;'; break;
