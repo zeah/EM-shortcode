@@ -1,4 +1,4 @@
-$(function() {
+jQuery(function($) {
 
 	$('.em-contact-input').focus(function() {
 		$(this).css('background-color', 'white');
