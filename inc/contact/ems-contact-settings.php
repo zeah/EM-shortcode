@@ -31,6 +31,7 @@ final class EMS_contact_settings {
 	}
 
 	public function page() {
+		echo '<div style="padding: 30px;"><code>[contact title="" name="" email="" message="" button="" style="(css)" slide=true]</code></div>';
 		echo '<form action="options.php" method="POST">';
 		settings_fields('em-contact-settings');
 		do_settings_sections('shortcode-contact');

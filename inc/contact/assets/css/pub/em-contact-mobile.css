@@ -1,0 +1,89 @@
+.em-contact-form {
+
+	display: flex;
+	flex-direction: column;
+	font-size: 1.6rem;
+
+	width: 100% !important;
+	max-width: 340px !important;
+	/*min-width: 100% !important;*/
+
+	margin: auto;
+}
+
+.em-contact-part {
+	margin-bottom: 2rem;
+}
+
+.em-contact-slide {
+	display: none;
+}
+
+.em-contact-input {
+	width: 100%;
+	font-size: 1.6rem;
+
+	padding: .5rem;
+}
+
+.em-contact-title {
+	margin: 0;
+	font-size: 3rem;
+	margin: 2rem 0;
+}
+
+.em-contact-title-slide {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.em-contact-thanks {
+	display: none;
+
+	margin: 2rem 0;
+
+	font-weight: 700;
+}
+
+.em-contact-message {
+	height: 20rem;
+	font-size: 1.6rem;
+
+	padding: 1rem;
+
+	font-family: arial;
+	resize: vertical;
+	min-height: 10rem;
+}
+
+.em-contact-part-button {
+	/*position: relative;*/
+	/*display: flex;*/
+	/*flex-direction: row-reverse;*/
+}
+
+.em-contact-button {
+	float: right;
+	/*position: absolute;*/
+	/*right: 0;*/
+	/*display: none;*/
+	padding: 1rem 1.5rem;
+
+	border: none;
+
+	background-color: hsl(120, 60%, 50%);
+	color: #fff;
+
+	font-size: 2.2rem;
+	cursor: pointer;
+}
+
+
+.em-contact-button:active {
+	background-color: hsl(240, 60%, 50%);
+}
+
+.em-contact-part-title {
+	margin: 0;
+	font-size: 2rem;
+}

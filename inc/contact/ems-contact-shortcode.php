@@ -22,11 +22,14 @@ final class EMS_contact_shortcode {
 	}
 
 	private function hooks() {
-
 		if (!shortcode_exists('contact')) add_shortcode('contact', [$this, 'add_shortcode']);
 		else add_shortcode('em-contact', [$this, 'add_shortcode']);
 	}
 
+
+	private function atts($atts, $name, $default) {
+		return isset($atts[$name]) ? $atts[$name] : $default;
+	}
 
 	public function add_shortcode($atts, $content = null) {
 		add_action('wp_enqueue_scripts', [$this, 'add_css']);
@@ -34,26 +37,35 @@ final class EMS_contact_shortcode {
 		return sprintf(
 			'<form class="em-contact-form"%s>
 				<input class="em-contact-phone" type="hidden" name="phone">
-				<h2 class="em-contact-title">Kontakt oss</h2>
-				<div class="em-contact-thanks">Takk for din kontakt. Vi vil kontakte deg snarest på e-post.</div>
-				<div class="em-contact-part em-contact-part-name">
-				    <h4 class="em-contact-part-title">Navn</h4>
+				<h2 class="em-contact-title"><span class="%s">%s</span></h2>
+				<div class="em-contact-thanks">%s</div>
+				<div class="em-contact-part em-contact-part-name%9$s">
+				    <h4 class="em-contact-part-title">%s</h4>
 					<input class="em-contact-name em-contact-input" type="text" name="name">
 				</div>
-				<div class="em-contact-part em-contact-part-email">
-				    <h4 class="em-contact-part-title">Epost</h4>
+				<div class="em-contact-part em-contact-part-email%9$s">
+				    <h4 class="em-contact-part-title">%s</h4>
 					<input class="em-contact-email em-contact-input" type="text" name="email">
 				</div>
-				<div class="em-contact-part em-contact-part-message">
-				    <h4 class="em-contact-part-title">Melding</h4>
+				<div class="em-contact-part em-contact-part-message%9$s">
+				    <h4 class="em-contact-part-title">%s</h4>
 					<textarea class="em-contact-message em-contact-input" name="message"></textarea>
 				</div>
-				<div class="em-contact-part em-contact-part-button">
-					<button class="em-contact-button" type="button">Send Melding</button>
+				<div class="em-contact-part em-contact-part-button%9$s">
+					<button class="em-contact-button" type="button">%s</button>
 				</div>
 			</form>',
 
-			isset($atts['style']) ? ' style="'.$atts['style'].'"' : ''
+			isset($atts['style']) ? ' style="'.$atts['style'].'"' : '',
+			isset($atts['slide']) ? ' em-contact-title-slide' : '',
+			$this->atts($atts, 'title', 'Kontakt oss'),
+			$this->atts($atts, 'thanks', 'Takk for din kontakt. Vi vil kontakte deg snarest på e-post.'),
+			$this->atts($atts, 'name', 'Navn'),
+			$this->atts($atts, 'email', 'Epost'),
+			$this->atts($atts, 'message', 'Melding'),
+			$this->atts($atts, 'button', 'Send Melding'),
+			isset($atts['slide']) ? ' em-contact-slide' : ''
+
 		);
 	}
 

@@ -4,6 +4,10 @@ $(function() {
 		$(this).css('background-color', 'white');
 	});
 
+	$('.em-contact-title-slide').click(function() {
+		$('.em-contact-slide').slideToggle();
+	});
+
 	$('.em-contact-button').click(function() {
 
 		var email = $('.em-contact-email').val();

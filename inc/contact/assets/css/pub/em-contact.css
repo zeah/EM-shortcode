@@ -13,6 +13,10 @@
 	font-size: 1.6rem;
 }
 
+.em-contact-slide {
+	display: none;
+}
+
 .em-contact-input {
 	width: 100%;
 	font-size: 1.6rem;
@@ -26,6 +30,11 @@
 	margin: 0;
 	font-size: 3rem;
 	margin: 2rem 0;
+}
+
+.em-contact-title-slide {
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 .em-contact-thanks {
