@@ -38,7 +38,7 @@ jQuery(function($) {
 				$('.em-contact-message').val('');
 				$('.em-contact-thanks').slideDown(500);
 				$('.em-contact-title').slideUp(500);
-
+				$('.em-contact-part').slideUp(500);
 
 			}
 		});
