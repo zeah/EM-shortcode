@@ -34,7 +34,7 @@ final class EMS_contact_settings {
 		echo '<div style="padding: 30px;"><code>[contact title="" name="" email="" message="" button="" style="(css)" slide=true]</code></div>';
 		echo '<form action="options.php" method="POST">';
 		settings_fields('em-contact-settings');
-		do_settings_sections('shortcode-contact');
+		do_settings_sections('em-shortcode-contact');
 		submit_button('save');
 		echo '</form>';
 	}
@@ -42,8 +42,8 @@ final class EMS_contact_settings {
 	public function register_settings() {
 		register_setting('em-contact-settings', 'em_contact', ['sanitize_callback' => [$this, 'sanitize']]);
 
-		add_settings_section('em-shortcode-setting', '', [$this, 'name_section'], 'shortcode-contact');
-		add_settings_field('em-shortcode-setting-gfunc', 'Callback URL', [$this, 'input_setting'], 'shortcode-contact', 'em-shortcode-setting', ['gfunc', 'url to gfunc.']);
+		add_settings_section('em-shortcode-setting', '', [$this, 'name_section'], 'em-shortcode-contact');
+		add_settings_field('em-shortcode-setting-gfunc', 'Callback URL', [$this, 'input_setting'], 'em-shortcode-contact', 'em-shortcode-setting', ['gfunc', 'url to gfunc.']);
 	}
 
 
@@ -52,7 +52,7 @@ final class EMS_contact_settings {
 
 		$d = [];
 		foreach($data as $key => $value)
-			$d[$key] = Axowl_settings_se::sanitize($value);
+			$d[$key] = EMS_contact_settings::sanitize($value);
 
 		return $d;
 	}
