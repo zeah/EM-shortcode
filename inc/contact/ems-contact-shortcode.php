@@ -72,7 +72,7 @@ final class EMS_contact_shortcode {
 	public function add_css() {
         wp_enqueue_style('contact-style', SHORTCODE_CONTACT_URL.'assets/css/pub/em-contact.css', [], '1.0.0', '(min-width: 951px)');
         wp_enqueue_style('contact-mobile', SHORTCODE_CONTACT_URL.'assets/css/pub/em-contact-mobile.css', [], '1.0.0', '(max-width: 950px)');
-        wp_enqueue_script('contact-js', SHORTCODE_CONTACT_URL.'assets/js/pub/em-contact.js', ['jquery'], '1.0.1');
+        wp_enqueue_script('contact-js', SHORTCODE_CONTACT_URL.'assets/js/pub/em-contact.js', ['jquery'], '1.0.2');
 		wp_localize_script('contact-js', 'emurl', ['ajax_url' => admin_url( 'admin-ajax.php')]);
 	}
 }

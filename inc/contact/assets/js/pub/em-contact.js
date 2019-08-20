@@ -18,7 +18,7 @@ jQuery(function($) {
 		var error = function(n) { $(n).css('background-color', '#fee'); stop = true; }
 
 		if (!/.{3,}/.test(name)) error('.em-contact-name');
-		if (!/.+\@.+\.{2,}/.test(email)) error('.em-contact-email');
+		if (!/.+\@.+\..{2,}/.test(email)) error('.em-contact-email');
 		if (!/.{5,}/.test(message)) error('.em-contact-message');
 
 		if (stop) return;

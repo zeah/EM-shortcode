@@ -30,9 +30,7 @@ final class EMS_contact_ajax {
 			|| !$_POST['message'])
 			exit;
 
-
 		$msg = "\n\n#####################\n\n".'SIDE: '.$_POST['side']."\n".'NAVN: '.$_POST['name']."\nEPOST: ".$_POST['email']."\n\nMELDING:\n".$_POST['message']."\n\n#####################\n\n";
-
 
 		$opt = get_option('em_contact');
 
