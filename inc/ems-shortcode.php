@@ -4,6 +4,7 @@
 defined('ABSPATH') or die('Blank Space');
 
 require_once 'icons/ems-fa.php';
+require_once 'contact/ems-contact-shortcode.php';
 
 final class EMS_shortcode {
 	/* singleton */
@@ -18,7 +19,8 @@ final class EMS_shortcode {
 	}
 
 	private function __construct() {
-		$this->icon = EMS_fa::get_instance(); // FA shortcode
+		EMS_fa::get_instance(); // FA shortcode
+		EMS_contact_shortcode::get_instance();
 		// $this->wp_hooks();
 	}
 
