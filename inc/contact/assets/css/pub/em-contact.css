@@ -96,3 +96,53 @@
 	margin: 0;
 	font-size: 2rem;
 }
+
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+
+	.em-contact-form {
+		display: -ms-grid;
+		-ms-grid-columns: auto auto;
+		-ms-grid-rows: auto auto auto auto auto;
+	}
+
+	.em-contact-title {
+		-ms-grid-row: 1;
+		-ms-grid-column: 1;
+		-ms-grid-column-span: 2;
+	}
+
+	.em-contact-thanks {
+		-ms-grid-row: 2;
+		-ms-grid-column: 1;
+		-ms-grid-column-span: 2;
+	}
+
+	.em-contact-part-name {
+		-ms-grid-row: 3;
+		-ms-grid-column: 1;
+	}
+
+	.em-contact-part-email {
+		-ms-grid-row: 3;
+		-ms-grid-column: 2;
+	}
+
+	.em-contact-part-message {
+		-ms-grid-row: 4;
+		-ms-grid-column: 1;
+		-ms-grid-column-span: 2;
+	}
+
+	.em-contact-part-button {
+		-ms-grid-row: 5;
+		-ms-grid-column: 1;
+		-ms-grid-column-span: 2;
+
+		margin-top: 20px;
+	}
+
+
+
+
+}
