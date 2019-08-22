@@ -1,0 +1,11 @@
+rating:
+	send to slack when review added with link to admin page
+	admin page with accepted/hide/delete option
+		get_posts(all)
+	redo js for adding new review?
+	test on internet explorer
+	add structured data
+		might need custom meta boxes on page/post edit screen
+		or check if the post content has shortcode for lan or kredittkort?
+			could then get that meta?
+

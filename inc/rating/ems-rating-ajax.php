@@ -17,6 +17,11 @@ final class EMS_rating_ajax {
 
 	public function from_form() {
 
+		// echo print_r($_POST, true);
+		// exit;
+
+		// echo print_r(get_post_status(45454353), true);
+
 		if (!isset($_POST['rating'])
 			|| !isset($_POST['nr'])
 			|| (!isset($_POST['name']) && !$_POST['name'])
@@ -25,7 +30,7 @@ final class EMS_rating_ajax {
 			exit;
 		}
 
-		if (!post_exist($_POST['nr'])) {
+		if (!get_post_status($_POST['nr'])) {
 			echo 404;
 			exit;
 		}
@@ -41,9 +46,13 @@ final class EMS_rating_ajax {
 			'status' => 'pending'
 		];
 
-		print_r($m);
+		// print_r($m);
 
-		update_post_meta($_POST['nr'], 'em_rating_test', $m);		
+		update_post_meta($_POST['nr'], 'em_rating_test', $m);
+
+		// to slack -> #misc-logs
+		// with link to admin page to set status of review
+		// wp_remote_post();
 
 		echo 200;
 		exit;
