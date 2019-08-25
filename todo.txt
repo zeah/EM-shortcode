@@ -1,11 +1,17 @@
 rating:
-	send to slack when review added with link to admin page
-	admin page with accepted/hide/delete option
+	DONE send to slack when review added with link to admin page
+	DONE admin page with accepted/hide/delete option
+	TEST text/name char limit
+	WHA js check of fields that is sent by ajax
 		get_posts(all)
 	redo js for adding new review?
 	test on internet explorer
-	add structured data
+	DONE add structured data
 		might need custom meta boxes on page/post edit screen
 		or check if the post content has shortcode for lan or kredittkort?
 			could then get that meta?
+
+
+contact:
+	test nonce
 

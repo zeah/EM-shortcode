@@ -3,8 +3,15 @@
 require_once 'ems-rating-ajax.php';
 require_once 'ems-rating-settings.php';
 
+define('SHORTCODE_REVIEW_URL', plugin_dir_url(__FILE__));
+
+
 final class EMS_rating_shortcode {
 	private static $instance = null;
+
+	private $css_added = false;
+
+	public static $meta = 'em_rating_test_3';
 
 	public static function get_instance() {
 		if (self::$instance === null) self::$instance = new self();
@@ -27,15 +34,22 @@ final class EMS_rating_shortcode {
 
 	public function add_shortcode($atts, $content = null) {
 
-		add_action('wp_footer', [$this, 'add_footer']);
-		add_action('wp_head', [$this, 'add_head']);
+		// wp_die('<xmp>'.print_r(date('d-m-y'), true).'</xmp>');
+		
 		wp_enqueue_script('jquery');
+
+		add_action('wp_footer', [$this, 'add_footer']);
+
+		$this->add_css($atts);
+
+
+		// add_action('wp_head', [$this, 'add_css']);
 
 		global $post;
 
 		if (!$post) return;
 
-		$meta = get_post_meta($post->ID, 'em_rating_test');
+		$meta = get_post_meta($post->ID, self::$meta);
 
 		if (isset($meta[0])) $meta = $meta[0];
 		else $meta = false;
@@ -65,6 +79,29 @@ final class EMS_rating_shortcode {
 			default: $stars = $this->stars(0);
 		}
 
+		$thing = isset($atts['type']) ? $atts['type'] : 'Product';
+		add_action('wp_footer', function() use ($rating, $size, $thing) {
+			$json = [
+				'@context' => 'https://schema.org/',
+				'@type' => 'WebPage',
+				'aggregateRating' => [
+					'@type' => 'AggregateRating',
+					'itemReviewed' => [
+						'@type' => $thing
+					],
+					'ratingValue' => $rating,
+					'bestRating' => '6',
+					'worstRating' => '1',
+					'ratingCount' => $size
+				]
+			];
+
+			printf(
+				'<script type="application/ld+json">%s</script>',
+				json_encode($json, JSON_PRETTY_PRINT)
+			);
+		});
+
 
 		return sprintf(
 			'<div class="em-rating-container">
@@ -73,17 +110,17 @@ final class EMS_rating_shortcode {
 			    <div class="em-rating-write">
 			    	<form>
 			    	<select class="em-rating-starsgiven">
-			    		<option value="6">6 stjerner</option>
-			    		<option value="5">5 stjerner</option>
-			    		<option value="4">4 stjerner</option>
-			    		<option value="3">3 stjerner</option>
-			    		<option value="2">2 stjerner</option>
-			    		<option value="1">1 stjerne</option>
+			    		<option value="6">6 %6$s</option>
+			    		<option value="5">5 %6$s</option>
+			    		<option value="4">4 %6$s</option>
+			    		<option value="3">3 %6$s</option>
+			    		<option value="2">2 %6$s</option>
+			    		<option value="1">1 %7$s</option>
 			    	</select>
 			    	<input class="em-rating-name" type="text" placeholder="Navn">
 			    	<textarea class="em-rating-text" placeholder="Din text"></textarea>
-			    	<button class="em-rating-send" type="button">send</button>
-			    	<button class="em-rating-close" type="button">close</button>
+			    	<button class="em-rating-button em-rating-send" type="button">%8$s</button>
+			    	<button class="em-rating-button em-rating-close" type="button">%9$s</button>
 			    	</form>
 			    </div>
 			</div>',
@@ -91,17 +128,23 @@ final class EMS_rating_shortcode {
 			$size,
 			$stars,
 			$size,
-			'Skriv en review'
+			isset($atts['text']) ? $atts['text'] : 'Skriv en anmeldelse',
+			isset($atts['stjerner']) ? $atts['stjerner'] : 'stjerner',
+			isset($atts['stjerne']) ? $atts['stjerne'] : 'stjerne',
+			isset($atts['send']) ? $atts['send'] : 'Send',
+			isset($atts['close']) ? $atts['close'] : 'Avbryt'
 		);
 	}
 
 	public function add_shortcode_overview($atts, $content = null) {
 		global $post;
+		// add_action('wp_head', [$this, 'add_css']);
+		// 
+		$this->add_css($atts);
 
-		$meta = get_post_meta($post->ID, 'em_rating_test');
+		// if (!has_shortcode($post->post_content, 'rating')) return;
 
-		// wp_die('<xmp>'.print_r($meta, true).'</xmp>');
-		
+		$meta = get_post_meta($post->ID, self::$meta);
 
 		if (isset($meta[0])) $meta = $meta[0];
 		else return;
@@ -114,142 +157,191 @@ final class EMS_rating_shortcode {
 
 		if (sizeof($meta) < $count) $count = sizeof($meta);
 
-		// wp_die('<xmp>'.print_r($count, true).'</xmp>');
-		
+		$c = 0;
+		foreach ($meta as $m) {
+			if ($c >= $count) break;
+			$c++;
 
-		for ($i = 0; $i < $count; $i++) {
-		// foreach ($meta as $m) {
-			$m = $meta[$i];
+			if ($m['status'] != 'approve') continue;
 
-			$html .= sprintf(
-				'<div class="em-ro-inner">
+			if (strpos(' ', $m['name']) !== 0) $m['name'] = preg_replace('/^(?:.*\s\w)(.*$)/', '', $m['name']);
+
+			$html = sprintf(
+				'<div class="em-ro-inner"%s>
 					<div class="em-ro-name">%s</div>
 					<div class="em-ro-rating">%s</div>
 					<div class="em-ro-text">%s</div>
+					%s
 				</div>',
+				isset($atts['inner']) ? ' style="'.$atts['inner'].'"' : '',
 				$m['name'],
 				$this->stars($m['rating']),
-				$m['text']
-			);	
+				$m['text'],
+				(isset($m['date']) && isset($atts['date']) && $atts['date'] == 'true') ? '<div class="em-ro-date">'.$m['date'].'</div>' : ''
+			) . $html;	
 		}
 
 		return sprintf(
-			'<div class="em-ro-container">%s</div>', $html
+			'<h2 class="em-ro-title">%s</h2><div class="em-ro-container"%s>%s</div>',
+			isset($atts['title']) ? $atts['title'] : 'Les hva andre har sagt',
+			isset($atts['style']) ? ' style="'.$atts['style'].'"' : '', 
+			$html
 		);
 	}
 
-	public function add_head() {
-		printf(
-			"<style>
-				.em-rating-container {
-					display: inline-block;
-					position: relative;
+	public function add_css($atts) {
 
-					padding: .5rem;
-					z-index: 999;
-				}
+		if ($this->css_added) return;
+		$this->css_added = true;
 
-				.em-rating-star {
-					fill: hsl(120, 100%%, 30%%);
-					filter: drop-shadow( 0 0 1px #333);
-				}
 
-				.em-rating-blank-star {
-					fill: hsl(0, 0%%, 100%%);
-					filter: drop-shadow( 0 0 1px #333);
-				}
+		$css = '<style>
+					.em-rating-container {
+						display: inline-block;
+						position: relative;
 
-				.em-rating-count-container {
-					position: relative;
-					bottom: 4px;
-					left: 10px;
-					color: #666;
-				}
+						padding: .5rem;
+						z-index: 999;
+					}
 
-				.em-rating-review {
-					font-size: 1.4rem;
-					cursor: pointer;
-				}
+					.em-rating-star {
+						fill: %1$s;
+						filter: drop-shadow( 0 0 1px #888);
+					}
 
-				.em-rating-write {
-					display: none;
-					position: absolute;
-					background-color: #fff;
-					top: 0;
-					left: 0;
-					right: -150px;
+					.em-rating-blank-star {
+						fill: hsl(0, 0%%, 100%%);
+						filter: drop-shadow( 0 0 1px #888);
+					}
 
-					padding: 2rem;
-					border: solid 1px #ccc;
-				} 
+					.em-rating-count-container {
+						position: relative;
+						bottom: 4px;
+						left: 10px;
+						color: #666;
+					}
 
-				.em-rating-starsgiven {
-					width: 100%%;
+					.em-rating-review {
+						font-size: 1.4rem;
+						cursor: pointer;
+					}
 
-					font-size: 2.4rem;
-				}
+					.em-rating-write {
+						display: none;
+						position: absolute;
+						background-color: %1$s;
+						top: 0;
+						left: 0;
+						right: -150px;
 
-				.em-rating-name {
-					font-size: 1.6rem;
-					margin: 2rem 0;
-					width: 100%%;
-					padding: .5rem;
-				}
+						padding: 2rem;
+					} 
 
-				.em-rating-text {
-					font-size: 1.6rem;
-					width: 100%%;
-					resize: vertical;
-					height: 100px;
+					.em-rating-starsgiven {
+						width: 100%%;
 
-					font-family: Arial;
-					padding: .5rem;
-				}
+						font-size: 2.4rem;
+					}
 
-				.em-rating-send {
-					font-size: 2.6rem;
-					float: right;
+					.em-rating-name {
+						font-size: 1.6rem;
+						margin: 2rem 0;
+						width: 100%%;
+						padding: .5rem;
+					}
 
-				}
+					.em-rating-text {
+						font-size: 1.6rem;
+						width: 100%%;
+						resize: vertical;
+						height: 100px;
 
-				.em-rating-close {
-					font-size: 2.6rem;
+						font-family: Arial;
+						padding: .5rem;
+					}
 
-				}
+					.em-rating-button {
+						cursor: pointer;
+							
+						padding: .5rem 1rem;
+						font-size: 1.6rem;
 
-				.em-ro-container {
-					display: flex;
-					flex-wrap: wrap;
-				}
 
-				.em-ro-inner {
-					border: solid 2px hsl(120, 50%%, 50%%);
-					margin: 0 1rem 1rem 0;
+						border: solid 2px hsl(197, 71%%, 73%%);
+						background-color: white;
+					}
 
-					width: 30rem;
-					height: 15rem;
-					background-color: hsl(120, 50%%, 99%%)
-				}
+					.em-rating-button:hover {
+						border: solid 2px hsl(197, 31%%, 63%%);
+					}
 
-				.em-ro-name {
-					background-color: hsl(120, 50%%, 50%%);
-					color: white;
+					.em-rating-send {
+						float: right;
 
-					padding: .5rem;
+					}
 
-					font-weight: 700;
-					text-transform: capitalize;
-				}
+					.em-rating-close {
+					}
 
-				.em-ro-rating {
-					padding: .5rem;
-				}
+					.em-ro-title {
+						margin: 0;
+						margin-top: 30px;
+						user-select: none;
+					}
 
-				.em-ro-text {
-					padding: .5rem;
-				}
+					.em-ro-container {
+						display: flex;
+						flex-wrap: wrap;
+						user-select: none;
+					}
 
-			</style>");
+
+					.em-ro-inner {
+						position: relative;
+						width: 30rem;
+						height: 15rem;
+						margin: 0 1rem 1rem 0;
+
+						border: solid 2px %1$s;
+					}
+
+					.em-ro-name {
+						padding: .5rem;
+						background-color: %1$s;
+
+						color: white;
+						font-weight: 700;
+						text-transform: capitalize;
+					}
+
+					.em-ro-rating {
+						padding: .5rem;
+					}
+
+					.em-ro-text {
+						padding: .5rem;
+					}
+
+					.em-ro-date {
+						position: absolute;
+						bottom: 0;
+						right: 5px;
+
+						font-size: 1.2rem;
+					}
+				</style>';
+		
+		if (!did_action('wp_head'))
+			add_action('wp_head', function() use ($atts, $css) {
+				printf($css, isset($atts['color']) ? $atts['color'] : 'hsl(120, 50%, 50%)');
+			});
+		else
+			add_action('wp_footer', function() use ($atts, $css) {
+				printf(
+					'<script>jQuery(function($) { $("head").append("%s")})</script>;',
+					preg_replace('/\r|\n|\s{2,}/', '', sprintf($css, isset($atts['color']) ? $atts['color'] : 'hsl(120, 50%, 50%)'))
+				);
+			});
 	}
 
 	public function add_footer() {
@@ -261,8 +353,6 @@ final class EMS_rating_shortcode {
 					var star = $('.em-rating-star').first();
 					var blankStar = $('.em-rating-blank-star').first();
 
-					// console.log(star);
-
 					$('.em-rating-review').click(function() {
 						$('.em-rating-write').fadeIn(200);
 					});
@@ -271,15 +361,23 @@ final class EMS_rating_shortcode {
 						$('.em-rating-write').hide();
 					});
 
-					$('.em-rating-send').one('click', function() {
+					$('.em-rating-send').click(function() {
 
 						var starsGiven = $('.em-rating-starsgiven').val();
+						var name = $('.em-rating-name').val();
+						var text = $('.em-rating-text').val();
+
+						if (name.length > 15 || text.length > 40) return; 
+
+						$(this).off('click');
 
 						$.post(emajax, {
 							action: 'rating',
+							security: '%s',
 							rating: starsGiven,
-							name: $('.em-rating-name').val(),
-							text: $('.em-rating-text').val(),
+							name: name,
+							text: text,
+							loc: location.href,
 							nr: %s
 						}, function(data) {	
 							console.log(data);
@@ -320,15 +418,37 @@ final class EMS_rating_shortcode {
 
 			</script>",
 			admin_url('admin-ajax.php'),
+			wp_create_nonce('sdlfkj92309urasladfk239'),
 			$post->ID
 		);
-		// wp_localize_script('contact-js', 'emurl', ['ajax_url' => admin_url( 'admin-ajax.php')]);
+	}
+
+	public function struc($count = 0, $rating = 0, $thing = 'Product') {
+
+		$json = [
+			'@context' => 'https://schema.org/',
+			'@type' => 'WebPage',
+			'aggreateRating' => [
+				'@type' => 'AggregateRating',
+				'itemReviewed' => [
+					'@type' => $thing
+				],
+				'ratingValue' => $rating,
+				'bestRating' => '6',
+				'worstRating' => '1',
+				'ratingCount' => $count
+			]
+		];
+
+		printf(
+			'<script type="application/ld+json">%s</script>',
+			json_encode($json, JSON_PRETTY_PRINT)
+		);
 
 	}
 
 
 	private function stars($nr) {
-		// wp_die('<xmp>'.print_r($nr, true).'</xmp>');
 		$star = sprintf('<svg class="%1$s-star" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path class="%1$s-star-path" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path d="M0 0h24v24H0z" fill="none"/></svg>', 'em-rating');
 		$star_blank = sprintf('<svg class="%1$s-star" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path class="%1$s-star-path" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path d="M0 0h24v24H0z" fill="none"/></svg>', 'em-rating-blank');
 
@@ -343,7 +463,6 @@ final class EMS_rating_shortcode {
 			default: $stars = $star_blank.$star_blank.$star_blank.$star_blank.$star_blank.$star_blank.$star_blank;
 		}
 
-		// wp_die('<xmp>'.print_r($stars, true).'</xmp>');
 		return $stars;
 	}
 }

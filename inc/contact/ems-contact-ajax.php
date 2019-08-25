@@ -20,6 +20,7 @@ final class EMS_contact_ajax {
 	}
 
 	public function from_form() {
+		check_ajax_referer('sdlfkj92309urasladfk239', 'security');
 
 		if (isset($_POST['phone'])
 			|| !isset($_POST['name'])

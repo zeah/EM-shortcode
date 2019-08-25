@@ -25,6 +25,7 @@ jQuery(function($) {
 
 		$.post(emurl.ajax_url, {
 			action: 'con',
+			security: emurl.sec,
 			side: location.href,
 			name: name,
 			email: email,
