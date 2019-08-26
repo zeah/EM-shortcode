@@ -36,9 +36,9 @@ final class EMS_rating_shortcode {
 
 		// wp_die('<xmp>'.print_r(date('d-m-y'), true).'</xmp>');
 		
-		wp_enqueue_script('jquery');
 
-		add_action('wp_footer', [$this, 'add_footer']);
+		wp_enqueue_script('jquery');
+		add_action('wp_footer', [$this, 'add_footer'], 100);
 
 		$this->add_css($atts);
 
@@ -104,9 +104,9 @@ final class EMS_rating_shortcode {
 
 
 		return sprintf(
-			'<div class="em-rating-container">
+			'<div class="em-rating-container"%10$s>
 			    <div class="em-rating-stars" data-sum="%s" data-size="%s">%s<span class="em-rating-count-container">(<span class="em-rating-count">%s</span>)</span></div>
-			    <div class="em-rating-review">%s</div>
+			    <div class="em-rating-review"%11$s>%s</div>
 			    <div class="em-rating-write">
 			    	<form>
 			    	<select class="em-rating-starsgiven">
@@ -117,8 +117,8 @@ final class EMS_rating_shortcode {
 			    		<option value="2">2 %6$s</option>
 			    		<option value="1">1 %7$s</option>
 			    	</select>
-			    	<input class="em-rating-name" type="text" placeholder="Navn">
-			    	<textarea class="em-rating-text" placeholder="Din text"></textarea>
+			    	<input class="em-rating-name" type="text" placeholder="%12$s">
+			    	<textarea class="em-rating-text" placeholder="%13$s"></textarea>
 			    	<button class="em-rating-button em-rating-send" type="button">%8$s</button>
 			    	<button class="em-rating-button em-rating-close" type="button">%9$s</button>
 			    	</form>
@@ -132,7 +132,11 @@ final class EMS_rating_shortcode {
 			isset($atts['stjerner']) ? $atts['stjerner'] : 'stjerner',
 			isset($atts['stjerne']) ? $atts['stjerne'] : 'stjerne',
 			isset($atts['send']) ? $atts['send'] : 'Send',
-			isset($atts['close']) ? $atts['close'] : 'Avbryt'
+			isset($atts['close']) ? $atts['close'] : 'Avbryt',
+			isset($atts['style']) ? ' style="'.$atts['style'].'"' : '',
+			isset($atts['write']) ? ' style="display: none;"' : '',
+			isset($atts['placeholder-name']) ? $atts['placeholder-name'] : 'Navn (maks 15 tegn)',
+			isset($atts['placeholder-text']) ? $atts['placeholder-text'] : 'Din tekst (maks 40 tegn)'
 		);
 	}
 
@@ -146,8 +150,9 @@ final class EMS_rating_shortcode {
 
 		$meta = get_post_meta($post->ID, self::$meta);
 
-		if (isset($meta[0])) $meta = $meta[0];
-		else return;
+		if (!isset($meta[0])) return;
+		$meta = $meta[0];
+		if (!$meta) return;
 
 		$html = '';
 
@@ -181,6 +186,10 @@ final class EMS_rating_shortcode {
 			) . $html;	
 		}
 
+		// wp_die('<xmp>'.print_r($html, true).'</xmp>');
+
+		if (!$html) return;
+
 		return sprintf(
 			'<h2 class="em-ro-title">%s</h2><div class="em-ro-container"%s>%s</div>',
 			isset($atts['title']) ? $atts['title'] : 'Les hva andre har sagt',
@@ -203,7 +212,7 @@ final class EMS_rating_shortcode {
 					}
 
 					.em-rating-star {
-						fill: %1$s;
+						fill: %3$s;
 						filter: drop-shadow( 0 0 1px #888);
 					}
 
@@ -221,14 +230,14 @@ final class EMS_rating_shortcode {
 					}
 
 					.em-rating-review {
-						font-size: 1.4rem;
+						font-size: 1.6rem;
 						cursor: pointer;
 					}
 
 					.em-rating-write {
 						display: none;
 						position: absolute;
-						background-color: %1$s;
+						background-color: %2$s;
 						top: 0;
 						left: 0;
 						right: -150px;
@@ -239,7 +248,8 @@ final class EMS_rating_shortcode {
 					.em-rating-starsgiven {
 						width: 100%%;
 
-						font-size: 2.4rem;
+						padding: .5rem;
+						font-size: 1.6rem;
 					}
 
 					.em-rating-name {
@@ -350,7 +360,11 @@ final class EMS_rating_shortcode {
 		
 		if (!did_action('wp_head'))
 			add_action('wp_head', function() use ($atts, $css) {
-				printf($css, isset($atts['color']) ? $atts['color'] : 'hsl(120, 50%, 50%)');
+				printf($css, 
+					isset($atts['color']) ? $atts['color'] : 'hsl(120, 50%, 50%)',
+					isset($atts['color-box']) ? $atts['color-box'] : (isset($atts['color']) ? $atts['color'] : 'hsl(120, 50%, 50%)'),
+					isset($atts['color-star']) ? $atts['color-star'] : (isset($atts['color']) ? $atts['color'] : 'hsl(120, 50%, 50%)')
+				);
 			});
 		else
 			add_action('wp_footer', function() use ($atts, $css) {
@@ -371,7 +385,7 @@ final class EMS_rating_shortcode {
 					var blankStar = $('.em-rating-blank-star').first();
 
 					$('.em-rating-review').click(function() {
-						$('.em-rating-write').fadeIn(200);
+						$(this).siblings('.em-rating-write').fadeIn(200);
 					});
 
 					$('.em-rating-close').click(function() {
@@ -384,7 +398,8 @@ final class EMS_rating_shortcode {
 						var name = $('.em-rating-name').val();
 						var text = $('.em-rating-text').val();
 
-						if (name.length > 15 || text.length > 40) return; 
+						if (name.length > 15 || text.length > 40) return;
+						if (!name.length || !text.length) return; 
 
 						$(this).off('click');
 
@@ -477,7 +492,7 @@ final class EMS_rating_shortcode {
 			case 3: $stars = $star.$star.$star.$star_blank.$star_blank.$star_blank; break;
 			case 2: $stars = $star.$star.$star_blank.$star_blank.$star_blank.$star_blank; break;
 			case 1: $stars = $star.$star_blank.$star_blank.$star_blank.$star_blank.$star_blank; break;
-			default: $stars = $star_blank.$star_blank.$star_blank.$star_blank.$star_blank.$star_blank.$star_blank;
+			default: $stars = $star_blank.$star_blank.$star_blank.$star_blank.$star_blank.$star_blank;
 		}
 
 		return $stars;

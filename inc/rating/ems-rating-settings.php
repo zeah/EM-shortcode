@@ -25,8 +25,8 @@ final class EMS_rating_settings {
 
 		add_submenu_page(
 			'options-general.php',
-			'Review Feature Settings',
-			'Review',
+			'Rating Feature Settings',
+			'Rating',
 			'manage_options',
 			'em-review-page',
 			[$this, 'review']
@@ -42,7 +42,7 @@ final class EMS_rating_settings {
 	}
 
 	public function review() {
-		echo '<div style="padding: 30px;"><code>[rating close="Avbryt" send="Send" stjerner="stjerner" stjerne="stjerne" text="Skriv en anmeldelse" color="hsl(120, 50%, 50%)" type="Product (structured data @type)"]</code></div>';
+		echo '<div style="padding: 30px;"><code>[rating style="(css)" close="Avbryt" send="Send" stjerner="stjerner" stjerne="stjerne" text="Skriv en anmeldelse" placeholder-name="Navn (maks 15 tegn)" placeholder-text="Din tekst (maks 40 tegn)" color="hsl(120, 50%, 50%)" color-box="hsl(120, 50%, 50%)" color-star="hsl(120, 50%, 50%)" write=true type="Product (structured data @type)"]</code></div>';
 		echo '<div style="padding: 30px;"><code>[rating-overview title="Les hva andre har sagt" style="(css)" inner="(css)" count=15 date=false]</code></div>';
 		echo '<form action="options.php" method="POST">';
 		settings_fields('em-review-setting');
@@ -87,7 +87,7 @@ final class EMS_rating_settings {
 	}
 
 	public function section() {
-		echo '<h2>Review Settings</h2>';
+		echo '<h2>Rating Settings</h2>';
 	}
 
 	public function input($d) {
