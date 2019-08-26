@@ -199,8 +199,6 @@ final class EMS_rating_shortcode {
 					.em-rating-container {
 						display: inline-block;
 						position: relative;
-
-						padding: .5rem;
 						z-index: 999;
 					}
 
@@ -216,9 +214,10 @@ final class EMS_rating_shortcode {
 
 					.em-rating-count-container {
 						position: relative;
-						bottom: 4px;
+						bottom: 8px;
 						left: 10px;
 						color: #666;
+						font-size: 2rem
 					}
 
 					.em-rating-review {
@@ -281,6 +280,7 @@ final class EMS_rating_shortcode {
 					}
 
 					.em-rating-close {
+						float: left;
 					}
 
 					.em-ro-title {
@@ -328,6 +328,23 @@ final class EMS_rating_shortcode {
 						right: 5px;
 
 						font-size: 1.2rem;
+					}
+
+					@media only screen and (max-width: 850px) {
+
+						.em-rating-container {
+							width: 100%%;
+							text-align: center;
+						}
+
+						.em-rating-write {
+							left: 1rem;
+							right: 1rem;
+						}
+
+						.em-ro-container {
+							justify-content: center;
+						}
 					}
 				</style>';
 		
@@ -449,8 +466,8 @@ final class EMS_rating_shortcode {
 
 
 	private function stars($nr) {
-		$star = sprintf('<svg class="%1$s-star" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path class="%1$s-star-path" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path d="M0 0h24v24H0z" fill="none"/></svg>', 'em-rating');
-		$star_blank = sprintf('<svg class="%1$s-star" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path class="%1$s-star-path" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path d="M0 0h24v24H0z" fill="none"/></svg>', 'em-rating-blank');
+		$star = sprintf('<svg class="%1$s-star" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path class="%1$s-star-path" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path d="M0 0h24v24H0z" fill="none"/></svg>', 'em-rating');
+		$star_blank = sprintf('<svg class="%1$s-star" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path class="%1$s-star-path" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path d="M0 0h24v24H0z" fill="none"/></svg>', 'em-rating-blank');
 
 		$stars = '';
 		switch ($nr) {
