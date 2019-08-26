@@ -2,7 +2,7 @@
 /*
 Plugin Name: EM Shortcode
 Description: Shortcodes
-Version: 0.0.13
+Version: 0.0.14
 GitHub Plugin URI: zeah/EM-shortcode
 */
 

@@ -80,14 +80,18 @@ final class EMS_rating_shortcode {
 		}
 
 		$thing = isset($atts['type']) ? $atts['type'] : 'Product';
-		add_action('wp_footer', function() use ($rating, $size, $thing) {
+		$name = isset($atts['name']) ? $atts['name'] : $post->post_title;
+		$url = isset($atts['url']) ? $atts['url'] : false;
+
+		add_action('wp_footer', function() use ($rating, $size, $thing, $name, $url) {
 			$json = [
 				'@context' => 'https://schema.org/',
 				'@type' => 'WebPage',
 				'aggregateRating' => [
 					'@type' => 'AggregateRating',
 					'itemReviewed' => [
-						'@type' => $thing
+						'@type' => $thing,
+						'name' => $name
 					],
 					'ratingValue' => $rating,
 					'bestRating' => '6',
@@ -95,6 +99,8 @@ final class EMS_rating_shortcode {
 					'ratingCount' => $size
 				]
 			];
+
+			if ($url) $json['aggregateRating']['itemReviewed']['url'] = $url;
 
 			printf(
 				'<script type="application/ld+json">%s</script>',
@@ -455,7 +461,7 @@ final class EMS_rating_shortcode {
 		);
 	}
 
-	public function struc($count = 0, $rating = 0, $thing = 'Product') {
+	public function struc($count = 0, $rating = 0, $thing = 'Product', $name = null) {
 
 		$json = [
 			'@context' => 'https://schema.org/',
@@ -463,7 +469,8 @@ final class EMS_rating_shortcode {
 			'aggreateRating' => [
 				'@type' => 'AggregateRating',
 				'itemReviewed' => [
-					'@type' => $thing
+					'@type' => $thing,
+					'name' => $name
 				],
 				'ratingValue' => $rating,
 				'bestRating' => '6',

@@ -42,7 +42,7 @@ final class EMS_rating_settings {
 	}
 
 	public function review() {
-		echo '<div style="padding: 30px;"><code>[rating style="(css)" close="Avbryt" send="Send" stjerner="stjerner" stjerne="stjerne" text="Skriv en anmeldelse" placeholder-name="Navn (maks 15 tegn)" placeholder-text="Din tekst (maks 40 tegn)" color="hsl(120, 50%, 50%)" color-box="hsl(120, 50%, 50%)" color-star="hsl(120, 50%, 50%)" write=true type="Product (structured data @type)"]</code></div>';
+		echo '<div style="padding: 30px;"><code>[rating style="(css)" close="Avbryt" send="Send" stjerner="stjerner" stjerne="stjerne" text="Skriv en anmeldelse" placeholder-name="Navn (maks 15 tegn)" placeholder-text="Din tekst (maks 40 tegn)" color="hsl(120, 50%, 50%)" color-box="hsl(120, 50%, 50%)" color-star="hsl(120, 50%, 50%)" write=true type="Product (structured data @type)" name="post_title (name of what\'s reviewed)" url="(url of what\'s reviewed)"]</code></div>';
 		echo '<div style="padding: 30px;"><code>[rating-overview title="Les hva andre har sagt" style="(css)" inner="(css)" count=15 date=false]</code></div>';
 		echo '<form action="options.php" method="POST">';
 		settings_fields('em-review-setting');
