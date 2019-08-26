@@ -160,11 +160,11 @@ final class EMS_rating_shortcode {
 		$c = 0;
 		foreach ($meta as $m) {
 			if ($c >= $count) break;
+			if ($m['status'] != 'approve') continue;
 			$c++;
 
-			if ($m['status'] != 'approve') continue;
-
-			if (strpos(' ', $m['name']) !== 0) $m['name'] = preg_replace('/^(?:.*\s\w)(.*$)/', '', $m['name']);
+			// if (strpos(' ', $m['name']) !== 0) 
+			$m['name'] = preg_replace('/(.*?\s\w)(.*)/', '$1', $m['name']);
 
 			$html = sprintf(
 				'<div class="em-ro-inner"%s>

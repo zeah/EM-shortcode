@@ -42,8 +42,8 @@ final class EMS_rating_settings {
 	}
 
 	public function review() {
-		echo '<div style="padding: 30px;"><code>[review close="Avbryt" send="Send" stjerner="stjerner" stjerne="stjerne" text="Skriv en anmeldelse" color="hsl(120, 50%, 50%)" type="Product (structured data @type)"]</code></div>';
-		echo '<div style="padding: 30px;"><code>[review-overview title="Les hva andre har sagt" style="(css)" inner="(css)" count=15 date=false]</code></div>';
+		echo '<div style="padding: 30px;"><code>[rating close="Avbryt" send="Send" stjerner="stjerner" stjerne="stjerne" text="Skriv en anmeldelse" color="hsl(120, 50%, 50%)" type="Product (structured data @type)"]</code></div>';
+		echo '<div style="padding: 30px;"><code>[rating-overview title="Les hva andre har sagt" style="(css)" inner="(css)" count=15 date=false]</code></div>';
 		echo '<form action="options.php" method="POST">';
 		settings_fields('em-review-setting');
 		do_settings_sections('em-review-page');
