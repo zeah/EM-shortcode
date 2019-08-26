@@ -26,4 +26,8 @@ jQuery(function($) {
 
 	});
 
+	$('.em-rating-o-button').click(function() {
+		$('.em-rating-o-container').toggle();
+	});
+
 });

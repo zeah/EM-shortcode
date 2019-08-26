@@ -42,8 +42,37 @@ final class EMS_rating_settings {
 	}
 
 	public function review() {
-		echo '<div style="padding: 30px;"><code>[rating style="(css)" close="Avbryt" send="Send" stjerner="stjerner" stjerne="stjerne" text="Skriv en anmeldelse" placeholder-name="Navn (maks 15 tegn)" placeholder-text="Din tekst (maks 40 tegn)" color="hsl(120, 50%, 50%)" color-box="hsl(120, 50%, 50%)" color-star="hsl(120, 50%, 50%)" write=true type="Product (structured data @type)" name="post_title (name of what\'s reviewed)" url="(url of what\'s reviewed)"]</code></div>';
-		echo '<div style="padding: 30px;"><code>[rating-overview title="Les hva andre har sagt" style="(css)" inner="(css)" count=15 date=false]</code></div>';
+		echo '<div style="padding: 15px;"><code>[rating style="(css)" close="Avbryt" send="Send" stjerner="stjerner" stjerne="stjerne" text="Skriv en anmeldelse" placeholder-name="Navn (maks 15 tegn)" placeholder-text="Din tekst (maks 40 tegn)" color="hsl(120, 50%, 50%)" color-box="hsl(120, 50%, 50%)" color-star="hsl(120, 50%, 50%)" write=true type="Product (structured data @type)" name="post_title (name of what\'s reviewed)" url="(url of what\'s reviewed)"]</code></div>';
+		echo '<div style="padding: 15px;"><code>[rating-overview title="Les hva andre har sagt" style="(css)" inner="(css)" count=15 date=false]</code></div>';
+		echo '<button type="button" style="margin: 15px;" class="button em-rating-o-button">Hvis forklaring</button>
+			  <div style="display: none; padding: 1rem" class="em-rating-o-container">
+			  <ul>
+			  	<li>style</li>
+			  	<li>close</li>
+			  	<li>send</li>
+			  	<li>stjerner</li>
+			  	<li>stjerne</li>
+			  	<li>text</li>
+			  	<li>placeholder-name</li>
+			  	<li>placeholder-text</li>
+			  	<li>color</li>
+			  	<li>color-box</li>
+			  	<li>color-star</li>
+			  	<li>write</li>
+			  	<li>type</li>
+			  	<li>name</li>
+			  	<li>url</li>
+			  </ul>
+
+			  <ul>
+			    <li>title</li>
+			    <li>style</li>
+			    <li>inner</li>
+			    <li>count</li>
+			    <li>date</li>
+			  </ul>
+			  </div>	
+		';
 		echo '<form action="options.php" method="POST">';
 		settings_fields('em-review-setting');
 		do_settings_sections('em-review-page');
